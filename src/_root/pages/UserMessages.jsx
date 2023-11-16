@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useAuthContext } from "../../_context/authContext";
 import { useState } from "react";
-const UserMessages = ({ message }) => {
+const UserMessages = ({ message, inputref }) => {
   const { currentUser, editMessage } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message.text);
+  const editInputRef = useRef(null);
+
   const handleEditMessage = () => {
     setEditMode(true);
   };
   const handleCancel = () => {
     setEditedMessage(message.text);
     setEditMode(false);
+    inputref.current.focus();
   };
   const handleChange = (e) => {
     setEditedMessage(e.target.value);
@@ -18,13 +21,28 @@ const UserMessages = ({ message }) => {
   const handleEdit = () => {
     editMessage({ text: editedMessage, id: message.id });
     setEditMode(false);
+    inputref.current.focus();
   };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && editedMessage.trim() !== "") {
+      handleEdit();
+    }
+  };
+  useEffect(() => {
+    editInputRef.current?.focus();
+  }, [editMode]);
   if (editMode) {
     return (
       <div key={message.id} style={{ textAlign: "right" }}>
         <span>
           {message.username},{" "}
-          <input type='text' value={editedMessage} onChange={handleChange} />{" "}
+          <input
+            type='text'
+            value={editedMessage}
+            onChange={handleChange}
+            ref={editInputRef}
+            onKeyDown={handleKeyPress}
+          />{" "}
           {message.time.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",

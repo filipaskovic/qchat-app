@@ -16,19 +16,23 @@ const userExist = (currentUsers, action) => {
   );
 };
 
+const updateLocalStorage = (users) => {
+  currentUsers = users;
+  localStorage.setItem("users", JSON.stringify(users));
+};
+
 export const reducer = (state, action) => {
   switch (action.type) {
     case ADD_USER:
       const validationResult = validateUser(action.payload);
       if (validationResult) {
         return { ...state, error: validationResult };
-      } else {
-        const newUser = { ...action.payload, error: null, logged: true };
-        const updatedUsers = [...currentUsers, newUser];
-        currentUsers = updatedUsers;
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
-        return updatedUsers;
       }
+
+      const newUser = { ...action.payload, error: null, logged: true };
+      const updatedUsers = [...currentUsers, newUser];
+      updateLocalStorage(updatedUsers);
+      return updatedUsers;
 
     case LOGIN:
       if (userExist(currentUsers, action.payload)) {
@@ -37,8 +41,7 @@ export const reducer = (state, action) => {
             ? { ...user, logged: true }
             : user
         );
-        currentUsers = updatedUsers;
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
+        updateLocalStorage(updatedUsers);
         return updatedUsers;
       } else {
         return {
@@ -46,13 +49,13 @@ export const reducer = (state, action) => {
           error: { logErr: "wrong username or password" },
         };
       }
+
     case LOGOUT:
       const updateUsersLoginStatus = currentUsers.map((user) => ({
         ...user,
         logged: false,
       }));
-      currentUsers = updateUsersLoginStatus;
-      localStorage.setItem("users", JSON.stringify(updateUsersLoginStatus));
+      updateLocalStorage(updateUsersLoginStatus);
       return updateUsersLoginStatus;
     case ADD_MESSAGE:
       const currentUser = currentUsers.find((user) => user.logged === true);
@@ -63,46 +66,37 @@ export const reducer = (state, action) => {
         id: crypto.randomUUID(),
       };
       const updatedMessages = [...currentUser.messages, newMessage];
-
       const updatedUser = { ...currentUser, messages: updatedMessages };
 
       if (currentUsers.length === 1) {
-        console.log(updatedUser);
-        currentUsers = [updatedUser];
-        localStorage.setItem("users", JSON.stringify(currentUsers));
+        updateLocalStorage([updatedUser]);
       } else {
-        const updatedUsers = currentUsers.map((user) => {
-          return user.username === currentUser.username ? updatedUser : user;
-        });
-        currentUsers = updatedUsers;
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
-        console.log(updatedUsers);
+        const updatedUsersForAddMessage = currentUsers.map((user) =>
+          user.username === currentUser.username ? updatedUser : user
+        );
+        updateLocalStorage(updatedUsersForAddMessage);
       }
       return currentUsers;
+
     case EDIT_MESSAGE:
       const userForEditing = currentUsers.find((user) => user.logged === true);
-
-      const updatedUserMessages = userForEditing.messages.map((message) => {
-        if (action.payload.id === message.id) {
-          return { ...message, text: action.payload.text, edited: true };
-        }
-        return message;
-      });
+      const updatedUserMessages = userForEditing.messages.map((message) =>
+        action.payload.id === message.id
+          ? { ...message, text: action.payload.text, edited: true }
+          : message
+      );
 
       const updatedEditedUser = {
         ...userForEditing,
         messages: updatedUserMessages,
       };
 
-      const updatedUsers = currentUsers.map((user) => {
-        if (user.username === userForEditing.username) {
-          return updatedEditedUser;
-        }
-        return user;
-      });
-      currentUsers = updatedUsers;
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-      return updatedUsers;
+      const updatedUsersForEditMessage = currentUsers.map((user) =>
+        user.username === userForEditing.username ? updatedEditedUser : user
+      );
+      updateLocalStorage(updatedUsersForEditMessage);
+      return updatedUsersForEditMessage;
+
     default:
       return state;
   }

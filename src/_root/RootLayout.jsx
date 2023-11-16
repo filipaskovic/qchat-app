@@ -5,8 +5,7 @@ const RootLayout = () => {
   const { currentUsers } = useAuthContext();
   if (currentUsers.length === 0) {
     return <Navigate to={"/Sign-up"} />;
-  }
-  if (currentUsers.every((user) => user.logged === false)) {
+  } else if (currentUsers.every((user) => user.logged === false)) {
     return <Navigate to={"/Sign-in"} />;
   } else return <Outlet />;
 };
