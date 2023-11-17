@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import { useChatContext } from "../../_context/chatContext";
 import { useState } from "react";
-const UserMessage = ({ message, inputref }) => {
+const UserMessage = ({ message: { text, id, edited, time }, inputref }) => {
   const { editMessage } = useChatContext();
   const [editMode, setEditMode] = useState(false);
-  const [editedMessage, setEditedMessage] = useState(message.text);
+  const [editedMessage, setEditedMessage] = useState(text);
   const editInputRef = useRef(null);
 
   const handleEditMessage = () => {
     setEditMode(true);
   };
   const handleCancel = () => {
-    setEditedMessage(message.text);
+    setEditedMessage(text);
     setEditMode(false);
     inputref.current.focus();
   };
@@ -19,7 +19,7 @@ const UserMessage = ({ message, inputref }) => {
     setEditedMessage(e.target.value);
   };
   const handleEdit = () => {
-    editMessage({ text: editedMessage, id: message.id });
+    editMessage({ text: editedMessage, id });
     setEditMode(false);
     inputref.current.focus();
   };
@@ -33,9 +33,9 @@ const UserMessage = ({ message, inputref }) => {
   }, [editMode]);
   if (editMode) {
     return (
-      <div key={message.id} style={{ textAlign: "right" }}>
+      <div key={id} style={{ textAlign: "right" }}>
         <span>
-          {message.username},
+          Me,
           <input
             type='text'
             value={editedMessage}
@@ -46,7 +46,7 @@ const UserMessage = ({ message, inputref }) => {
         </span>
         <span>
           <button
-            disabled={!editedMessage.trim() || editedMessage === message.text}
+            disabled={!editedMessage.trim() || editedMessage === text}
             onClick={handleEdit}>
             save
           </button>
@@ -56,13 +56,11 @@ const UserMessage = ({ message, inputref }) => {
     );
   } else {
     return (
-      <div key={message.id} style={{ textAlign: "right" }}>
+      <div key={id} style={{ textAlign: "right" }}>
+        {`${new Date(time).getHours()}:${new Date(time).getMinutes()}  `}
         <span>
-          {`${message.username}, ${editedMessage} `}
-          {message.edited && ", edited "}
-          {`${new Date(message.time).getHours()}:${new Date(
-            message.time
-          ).getMinutes()}  `}
+          Me , {editedMessage}
+          {edited && ", edited "}
         </span>
 
         <button onClick={handleEditMessage}>edit</button>

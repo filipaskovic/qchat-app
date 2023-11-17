@@ -1,14 +1,13 @@
 import React from "react";
 
-const OthersMessage = ({ message }) => {
+const OthersMessage = ({ message: { text, id, username, edited, time } }) => {
+  console.log();
   return (
-    <div key={message.id}>
+    <div key={id}>
       <span>
-        {`${message.username}, ${message.text} `}
-        {message.edited && ", edited "}
-        {`${new Date(message.time).getHours()}:${new Date(
-          message.time
-        ).getMinutes()}  `}
+        {`${username}, ${text} `}
+        {edited && ", edited "}
+        {`${new Date(time).getHours()}:${new Date(time).getMinutes()}  `}
       </span>
     </div>
   );

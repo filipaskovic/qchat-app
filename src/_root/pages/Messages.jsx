@@ -4,7 +4,7 @@ import UserMessage from "./UserMessage";
 import OthersMessage from "./OthersMessage";
 
 const Messages = () => {
-  const { currentUser, addMessage, currentMessages, state } = useChatContext();
+  const { currentUser, addMessage, currentMessages } = useChatContext();
   const [message, setMessage] = useState("");
 
   const inputRef = useRef(null);
@@ -34,11 +34,11 @@ const Messages = () => {
         backgroundColor: "gray",
         color: "white",
       }}>
-      {currentMessages.map((message, index) =>
+      {currentMessages.map((message) =>
         message.username === currentUser.username ? (
-          <UserMessage key={index} message={message} inputref={inputRef} />
+          <UserMessage key={message.id} message={message} inputref={inputRef} />
         ) : (
-          <OthersMessage key={index} message={message} />
+          <OthersMessage key={message.id} message={message} />
         )
       )}
       <input
