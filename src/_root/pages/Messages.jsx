@@ -24,7 +24,7 @@ const Messages = () => {
   };
   useEffect(() => {
     inputRef.current.focus();
-  }, [message]);
+  }, []);
 
   return (
     <div

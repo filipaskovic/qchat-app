@@ -31,11 +31,11 @@ const UserMessage = ({ message: { text, id, edited, time }, inputref }) => {
   useEffect(() => {
     editInputRef.current?.focus();
   }, [editMode]);
+
   if (editMode) {
     return (
       <div key={id} style={{ textAlign: "right" }}>
         <span>
-          Me,
           <input
             type='text'
             value={editedMessage}
@@ -57,11 +57,9 @@ const UserMessage = ({ message: { text, id, edited, time }, inputref }) => {
   } else {
     return (
       <div key={id} style={{ textAlign: "right" }}>
+        {edited && " edited "}
         {`${new Date(time).getHours()}:${new Date(time).getMinutes()}  `}
-        <span>
-          Me , {editedMessage}
-          {edited && ", edited "}
-        </span>
+        <span>{editedMessage}, Me</span>
 
         <button onClick={handleEditMessage}>edit</button>
       </div>
