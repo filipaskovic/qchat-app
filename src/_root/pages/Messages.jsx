@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useChatContext } from "../../_context/chatContext";
-import UserMessages from "./UserMessages";
-import OthersMessages from "./OthersMessages";
+import UserMessage from "./UserMessage";
+import OthersMessage from "./OthersMessage";
 
 const Messages = () => {
   const { currentUser, addMessage, currentMessages, state } = useChatContext();
@@ -36,9 +36,9 @@ const Messages = () => {
       }}>
       {currentMessages.map((message, index) =>
         message.username === currentUser.username ? (
-          <UserMessages key={index} message={message} inputref={inputRef} />
+          <UserMessage key={index} message={message} inputref={inputRef} />
         ) : (
-          <OthersMessages key={index} message={message} />
+          <OthersMessage key={index} message={message} />
         )
       )}
       <input
@@ -53,7 +53,6 @@ const Messages = () => {
       <button disabled={!message.trim()} onClick={handleAddMessage}>
         add
       </button>
-      <button onClick={() => console.log(state)}>log</button>
     </div>
   );
 };

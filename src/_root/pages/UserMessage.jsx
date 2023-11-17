@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { useChatContext } from "../../_context/chatContext";
 import { useState } from "react";
-const UserMessages = ({ message, inputref }) => {
-  const { currentUser, editMessage } = useChatContext();
+const UserMessage = ({ message, inputref }) => {
+  const { editMessage } = useChatContext();
   const [editMode, setEditMode] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message.text);
   const editInputRef = useRef(null);
@@ -35,14 +35,14 @@ const UserMessages = ({ message, inputref }) => {
     return (
       <div key={message.id} style={{ textAlign: "right" }}>
         <span>
-          {message.username},{" "}
+          {message.username},
           <input
             type='text'
             value={editedMessage}
             onChange={handleChange}
             ref={editInputRef}
             onKeyDown={handleKeyPress}
-          />{" "}
+          />
         </span>
         <span>
           <button
@@ -58,8 +58,11 @@ const UserMessages = ({ message, inputref }) => {
     return (
       <div key={message.id} style={{ textAlign: "right" }}>
         <span>
-          {`${message.username}, ${editedMessage}`}
-          {message.edited && ", edited"}
+          {`${message.username}, ${editedMessage} `}
+          {message.edited && ", edited "}
+          {`${new Date(message.time).getHours()}:${new Date(
+            message.time
+          ).getMinutes()}  `}
         </span>
 
         <button onClick={handleEditMessage}>edit</button>
@@ -68,4 +71,4 @@ const UserMessages = ({ message, inputref }) => {
   }
 };
 
-export default UserMessages;
+export default UserMessage;
