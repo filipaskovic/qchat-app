@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { useAuthContext } from "../../_context/authContext";
+import { useChatContext } from "../../_context/chatContext";
 import { useState } from "react";
 const UserMessages = ({ message, inputref }) => {
-  const { currentUser, editMessage } = useAuthContext();
+  const { currentUser, editMessage } = useChatContext();
   const [editMode, setEditMode] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message.text);
   const editInputRef = useRef(null);

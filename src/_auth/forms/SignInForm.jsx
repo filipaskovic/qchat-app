@@ -1,11 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useAuthContext } from "../../_context/authContext";
+import { Link, Navigate } from "react-router-dom";
+import { useChatContext } from "../../_context/chatContext";
 import { useState } from "react";
 import { initState } from "../../_constants/constants";
 
 const SignInForm = () => {
-  const { state, logUser } = useAuthContext();
+  const { state, logUser, currentUsers } = useChatContext();
+  if (currentUsers.length === 0) {
+    return <Navigate to={"/sign-up"} />;
+  }
   const [inputValues, setInputValues] = useState(initState);
   const handleChange = (e) => {
     const { name, value } = e.target;

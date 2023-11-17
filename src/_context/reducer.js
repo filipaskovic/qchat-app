@@ -32,7 +32,7 @@ export const reducer = (state, action) => {
       const newUser = { ...action.payload, error: null, logged: true };
       const updatedUsers = [...currentUsers, newUser];
       updateLocalStorage(updatedUsers);
-      return updatedUsers;
+      return currentUsers;
 
     case LOGIN:
       if (userExist(currentUsers, action.payload)) {
@@ -42,7 +42,7 @@ export const reducer = (state, action) => {
             : user
         );
         updateLocalStorage(updatedUsers);
-        return updatedUsers;
+        return currentUsers;
       } else {
         return {
           ...state,
@@ -95,7 +95,7 @@ export const reducer = (state, action) => {
         user.username === userForEditing.username ? updatedEditedUser : user
       );
       updateLocalStorage(updatedUsersForEditMessage);
-      return updatedUsersForEditMessage;
+      return currentUsers;
 
     default:
       return state;

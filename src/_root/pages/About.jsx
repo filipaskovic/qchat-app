@@ -1,7 +1,7 @@
 import React from "react";
-import { useAuthContext } from "../../_context/authContext";
+import { useChatContext } from "../../_context/chatContext";
 const About = () => {
-  const { currentUser } = useAuthContext();
+  const { currentUser } = useChatContext();
 
   return (
     <div>

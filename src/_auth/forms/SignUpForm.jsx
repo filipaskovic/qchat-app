@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../_context/authContext";
+import { useChatContext } from "../../_context/chatContext";
 import { initState } from "../../_constants/constants";
 import { useState } from "react";
 
 const SignUpForm = () => {
-  const { state, addUser } = useAuthContext();
+  const { state, addUser } = useChatContext();
   const [inputValues, setInputValues] = useState(initState);
   const handleChange = (e) => {
     const { name, value } = e.target;

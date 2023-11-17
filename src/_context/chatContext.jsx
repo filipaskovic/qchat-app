@@ -9,11 +9,11 @@ import {
 } from "../_constants/constants";
 import { reducer, currentUsers } from "./reducer";
 
-const AuthContext = createContext();
+const ChatContext = createContext();
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useChatContext = () => useContext(ChatContext);
 
-export const AuthProvider = ({ children }) => {
+export const ChatProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initState);
   const addUser = (user) => {
     dispatch({ type: ADD_USER, payload: user });
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const currentUser = currentUsers.find((user) => user.logged === true) || null;
 
   return (
-    <AuthContext.Provider
+    <ChatContext.Provider
       value={{
         currentUser,
         state,
@@ -46,6 +46,6 @@ export const AuthProvider = ({ children }) => {
         initState,
       }}>
       {children}
-    </AuthContext.Provider>
+    </ChatContext.Provider>
   );
 };

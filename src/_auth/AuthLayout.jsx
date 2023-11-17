@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
-import { useAuthContext } from "../_context/authContext";
+import { useChatContext } from "../_context/chatContext";
 
 const AuthLayout = () => {
-  const { currentUsers } = useAuthContext();
+  const { currentUsers } = useChatContext();
 
   return (
     <>

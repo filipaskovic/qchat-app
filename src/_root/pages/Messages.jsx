@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useAuthContext } from "../../_context/authContext";
+import { useChatContext } from "../../_context/chatContext";
 import UserMessages from "./UserMessages";
 import OthersMessages from "./OthersMessages";
 
 const Messages = () => {
-  const { currentUsers, currentUser, addMessage } = useAuthContext();
+  const { currentUsers, currentUser, addMessage } = useChatContext();
   const [allMessages, setAllMessages] = useState([]);
   const [message, setMessage] = useState("");
 

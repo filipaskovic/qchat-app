@@ -1,9 +1,9 @@
 import React from "react";
-import { useAuthContext } from "../../_context/authContext";
+import { useChatContext } from "../../_context/chatContext";
 import Messages from "./Messages";
 import About from "./About";
 const Home = () => {
-  const { logout } = useAuthContext();
+  const { logout } = useChatContext();
 
   const handleLogout = () => {
     logout();
