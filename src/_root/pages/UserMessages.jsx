@@ -43,10 +43,6 @@ const UserMessages = ({ message, inputref }) => {
             ref={editInputRef}
             onKeyDown={handleKeyPress}
           />{" "}
-          {message.time.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
         </span>
         <span>
           <button
@@ -62,12 +58,7 @@ const UserMessages = ({ message, inputref }) => {
     return (
       <div key={message.id} style={{ textAlign: "right" }}>
         <span>
-          {`${
-            message.username
-          }, ${editedMessage},  ${message.time.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}`}
+          {`${message.username}, ${editedMessage}`}
           {message.edited && ", edited"}
         </span>
 

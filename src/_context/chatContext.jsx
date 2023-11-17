@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import {
   ADD_USER,
   LOGIN,
@@ -7,7 +7,7 @@ import {
   EDIT_MESSAGE,
   initState,
 } from "../_constants/constants";
-import { reducer, currentUsers } from "./reducer";
+import { reducer, currentUsers, currentMessages } from "./reducer";
 
 const ChatContext = createContext();
 
@@ -30,6 +30,7 @@ export const ChatProvider = ({ children }) => {
   const editMessage = (editedMessage) => {
     dispatch({ type: EDIT_MESSAGE, payload: editedMessage });
   };
+
   const currentUser = currentUsers.find((user) => user.logged === true) || null;
 
   return (
@@ -44,6 +45,7 @@ export const ChatProvider = ({ children }) => {
         editMessage,
         currentUsers,
         initState,
+        currentMessages,
       }}>
       {children}
     </ChatContext.Provider>

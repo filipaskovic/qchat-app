@@ -7,8 +7,26 @@ import {
 } from "../_constants/constants";
 import validateUser from "./validateUser";
 
-export let currentUsers = JSON.parse(localStorage.getItem("users")) || [];
+function getMessages(users) {
+  let messages = [];
+  users.forEach((user) => {
+    messages = messages.concat(
+      user.messages.map((message) => ({
+        id: message.id,
+        username: user.username,
+        text: message.text,
+        time: new Date(message.time),
+        edited: message.edited,
+      }))
+    );
+  });
 
+  messages.sort((a, b) => a.time - b.time);
+  console.log(messages);
+  return messages;
+}
+export let currentUsers = JSON.parse(localStorage.getItem("users")) || [];
+export let currentMessages = JSON.parse(localStorage.getItem("messages")) || [];
 const userExist = (currentUsers, action) => {
   return currentUsers?.find(
     (user) =>
@@ -19,6 +37,10 @@ const userExist = (currentUsers, action) => {
 const updateLocalStorage = (users) => {
   currentUsers = users;
   localStorage.setItem("users", JSON.stringify(users));
+};
+const updateMessages = () => {
+  currentMessages = getMessages(currentUsers);
+  localStorage.setItem("messages", JSON.stringify(currentMessages));
 };
 
 export const reducer = (state, action) => {
@@ -32,6 +54,9 @@ export const reducer = (state, action) => {
       const newUser = { ...action.payload, error: null, logged: true };
       const updatedUsers = [...currentUsers, newUser];
       updateLocalStorage(updatedUsers);
+
+      updateMessages();
+
       return currentUsers;
 
     case LOGIN:
@@ -42,6 +67,8 @@ export const reducer = (state, action) => {
             : user
         );
         updateLocalStorage(updatedUsers);
+        updateMessages();
+
         return currentUsers;
       } else {
         return {
@@ -56,6 +83,7 @@ export const reducer = (state, action) => {
         logged: false,
       }));
       updateLocalStorage(updateUsersLoginStatus);
+
       return updateUsersLoginStatus;
     case ADD_MESSAGE:
       const currentUser = currentUsers.find((user) => user.logged === true);
@@ -76,6 +104,8 @@ export const reducer = (state, action) => {
         );
         updateLocalStorage(updatedUsersForAddMessage);
       }
+
+      updateMessages();
       return currentUsers;
 
     case EDIT_MESSAGE:
@@ -95,6 +125,7 @@ export const reducer = (state, action) => {
         user.username === userForEditing.username ? updatedEditedUser : user
       );
       updateLocalStorage(updatedUsersForEditMessage);
+      updateMessages();
       return currentUsers;
 
     default:

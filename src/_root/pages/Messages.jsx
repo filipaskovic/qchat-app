@@ -4,11 +4,11 @@ import UserMessages from "./UserMessages";
 import OthersMessages from "./OthersMessages";
 
 const Messages = () => {
-  const { currentUsers, currentUser, addMessage } = useChatContext();
-  const [allMessages, setAllMessages] = useState([]);
+  const { currentUser, addMessage, currentMessages, state } = useChatContext();
   const [message, setMessage] = useState("");
 
   const inputRef = useRef(null);
+
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
@@ -26,27 +26,6 @@ const Messages = () => {
     inputRef.current.focus();
   }, [message]);
 
-  useEffect(() => {
-    function getMessages(user) {
-      return user.messages.map((message) => ({
-        id: message.id,
-        username: user.username,
-        text: message.text,
-        time: new Date(message.time),
-        edited: message.edited,
-      }));
-    }
-
-    let messages = [];
-    currentUsers.forEach((user) => {
-      messages = messages.concat(getMessages(user));
-    });
-
-    messages.sort((a, b) => a.time - b.time);
-
-    setAllMessages(messages);
-  }, [currentUsers]);
-
   return (
     <div
       style={{
@@ -55,7 +34,7 @@ const Messages = () => {
         backgroundColor: "gray",
         color: "white",
       }}>
-      {allMessages.map((message, index) =>
+      {currentMessages.map((message, index) =>
         message.username === currentUser.username ? (
           <UserMessages key={index} message={message} inputref={inputRef} />
         ) : (
@@ -74,6 +53,7 @@ const Messages = () => {
       <button disabled={!message.trim()} onClick={handleAddMessage}>
         add
       </button>
+      <button onClick={() => console.log(state)}>log</button>
     </div>
   );
 };
