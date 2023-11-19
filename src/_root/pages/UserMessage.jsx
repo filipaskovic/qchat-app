@@ -1,33 +1,40 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useChatContext } from "../../_context/chatContext";
-import { useState } from "react";
-const UserMessage = ({ message: { text, id, edited, time }, inputref }) => {
+
+const UserMessage = ({ message: { text, id, edited, time }, inputRef }) => {
   const { editMessage } = useChatContext();
   const [editMode, setEditMode] = useState(false);
   const [editedMessage, setEditedMessage] = useState(text);
   const editInputRef = useRef(null);
 
-  const handleEditMessage = () => {
+  const handleEditMessage = useCallback(() => {
     setEditMode(true);
-  };
-  const handleCancel = () => {
+  }, []);
+
+  const handleCancel = useCallback(() => {
     setEditedMessage(text);
     setEditMode(false);
-    inputref.current.focus();
-  };
-  const handleChange = (e) => {
+    inputRef.current.focus();
+  }, [text]);
+
+  const handleChange = useCallback((e) => {
     setEditedMessage(e.target.value);
-  };
-  const handleEdit = () => {
+  }, []);
+
+  const handleEdit = useCallback(() => {
     editMessage({ text: editedMessage, id });
     setEditMode(false);
-    inputref.current.focus();
-  };
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && editedMessage.trim() !== "") {
-      handleEdit();
-    }
-  };
+    inputRef.current.focus();
+  }, [editMessage, editedMessage, id]);
+
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (e.key === "Enter" && editedMessage.trim() !== "") {
+        handleEdit();
+      }
+    },
+    [handleEdit, editedMessage]
+  );
   useEffect(() => {
     editInputRef.current?.focus();
   }, [editMode]);

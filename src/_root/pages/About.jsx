@@ -1,10 +1,12 @@
 import React from "react";
 import { useChatContext } from "../../_context/chatContext";
 const About = () => {
-  const {
-    currentUser: { username, firstName, lastName, email },
-  } = useChatContext();
+  const { currentUser, logout } = useChatContext();
+  const { username, firstName, lastName, email } = currentUser;
 
+  const handleLogout = () => {
+    logout();
+  };
   return (
     <>
       <p>Welcome{username}</p>
@@ -12,6 +14,7 @@ const About = () => {
       <p>first name:{firstName}</p>
       <p>last Name:{lastName}</p>
       <p>email : {email}</p>
+      <button onClick={handleLogout}>Logout</button>
     </>
   );
 };

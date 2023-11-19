@@ -17,7 +17,7 @@ const SignUpForm = () => {
     addUser(inputValues);
   };
   return (
-    <>
+    <div className='container'>
       <form onSubmit={handleFormSubmit} noValidate>
         <input
           type='text'
@@ -56,11 +56,10 @@ const SignUpForm = () => {
         {state.error?.password && <span>{state.error?.password}</span>}
         <button>Sign Up</button>
         {state.error?.general && <span>{state.error?.general}</span>}
+        <p>already have an account</p>
+        <Link to='/sign-in'>Log in </Link>
       </form>
-
-      <p>already have an account</p>
-      <Link to='/sign-in'>Log in </Link>
-    </>
+    </div>
   );
 };
 

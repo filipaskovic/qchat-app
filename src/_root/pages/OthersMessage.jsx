@@ -9,8 +9,9 @@ const OthersMessage = ({ message: { text, id, username, edited, time } }) => {
     <div key={id}>
       <span>
         {`${username}, ${text} `}
-        {edited && ", edited "}
+
         {`${hours}:${minutes}  `}
+        {edited && ", edited "}
       </span>
     </div>
   );
